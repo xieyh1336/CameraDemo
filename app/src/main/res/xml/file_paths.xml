@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--自定义fileProvider路径，Android7.0以上需配置-->
+<paths>
+    <!--external-files-path代表的是context.getExternalFilesDir(null)路径-->
+    <external-files-path
+        name="images"
+        path="."/>
+</paths>

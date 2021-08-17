@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/iv_picture"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/tv_file_path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginHorizontal="20dp"
+        android:textColor="#000"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/tv_capture"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="相机"
+            android:gravity="center"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:background="#3366ff"/>
+
+        <TextView
+            android:id="@+id/tv_album"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="相册"
+            android:gravity="center"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:background="#3366ff"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+
+        <TextView
+            android:id="@+id/tv_crop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="裁剪"
+            android:gravity="center"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:background="#3366ff"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+
+        <TextView
+            android:id="@+id/tv_file"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="转换"
+            android:gravity="center"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:background="#3366ff"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
