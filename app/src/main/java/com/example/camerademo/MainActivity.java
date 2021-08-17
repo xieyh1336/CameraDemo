@@ -3,20 +3,15 @@ package com.example.camerademo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.io.File;
 
@@ -59,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tv_album:
                 //相册
-                if (CameraUtils.checkSelectPhotoPermission(this)) {
+                if (CameraUtils.checkSelectPhotoPermission(this)) {//检查权限
                     //有权限，打开相册
                     openAlbum();
                 } else {
@@ -69,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tv_crop:
                 //裁剪
-                if (CameraUtils.checkCropPermission(this)) {
+                if (CameraUtils.checkCropPermission(this)) {//检查权限
                     //有权限，打开裁剪
                     openCrop();
                 } else {
