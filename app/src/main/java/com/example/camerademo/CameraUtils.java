@@ -9,12 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.FileUtils;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -27,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * @作者 xhlm
@@ -55,10 +54,8 @@ public class CameraUtils {
 
     /**
      * 打开相机
-     * AndroidQ以上：
-     * 相片保存进公有目录(公有目录/picture/子文件夹)
-     * AndroidQ以下：
-     * 相片保存进沙盒内(沙盒目录/picture/子文件夹)
+     * AndroidQ以上：图片保存进公共目录内(公共目录/picture/子文件夹)
+     * AndroidQ以下：相片保存进沙盒目录内(沙盒目录/picture/子文件夹)
      * @param activity activity
      * @param name 相片名
      * @param child 存放的子文件夹
@@ -91,6 +88,7 @@ public class CameraUtils {
             return null;
         }
         Log.e(TAG, "cameraUri：" + uri);
+        //指定图片保存位置
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         activity.startActivityForResult(intent, CAMERA_TAKE_PHOTO);
@@ -105,7 +103,7 @@ public class CameraUtils {
     }
 
     /**
-     * 图片裁剪，裁剪后存放在沙盒目录下
+     * 图片裁剪，裁剪后存放在沙盒目录下(沙盒目录/picture/子文件夹)
      * @param activity activity
      * @param uri 图片uri
      * @param name 裁剪后的图片名
@@ -113,6 +111,10 @@ public class CameraUtils {
      * @return 裁剪后的图片uri
      */
     public static Uri openCrop(Activity activity, Uri uri, String name, String child) {
+        if (uri == null) {
+            Log.e(TAG, "uri为空");
+            return null;
+        }
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             //未挂在存储设备或者没有读写权限
             return null;
@@ -142,9 +144,10 @@ public class CameraUtils {
         // aspectX aspectY 是宽高的比例
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        // 图片格式
+
         intent.putExtra(MediaStore.EXTRA_OUTPUT, resultUri);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG);
+        // 图片格式
+        intent.putExtra("outputFormat", "png");
         intent.putExtra("noFaceDetection", true);// 取消人脸识别
         intent.putExtra("return-data", true);// true:不返回uri，false：返回uri
         activity.startActivityForResult(intent, CAMERA_CROP);
@@ -184,7 +187,6 @@ public class CameraUtils {
                             File cache = new File(context.getExternalCacheDir(), fileName);
                             FileOutputStream fileOutputStream = new FileOutputStream(cache);
                             if (inputStream != null) {
-                                Log.e(TAG, "FileUtils：" + FileUtils.class.getPackage());
 //                                    FileUtils.copy(inputStream, fileOutputStream);
                                 //上面的copy方法在低版本的手机中会报java.lang.NoSuchMethodError错误，使用原始的读写流操作进行复制
                                 byte[] len = new byte[Math.min(inputStream.available(), 1024 * 1024)];
@@ -215,29 +217,16 @@ public class CameraUtils {
             Log.e(TAG, "uri为空");
             return;
         }
-        File file = uriToFile(context, uri);
-        if (uri.getPath() != null) {
-            Log.e(TAG, "uri.getPath()：" + uri.getPath());
+        Log.e(TAG, "更新系统相册uri：" + uri);
+        if (uri.getScheme() == null) {
+            return;
         }
-        if (uri.getScheme() != null) {
-            Log.e(TAG, "uri.getScheme()：" + uri.getScheme());
+        if (uri.getScheme().equals(ContentResolver.SCHEME_FILE) && uri.getPath() != null) {
+            File file = new File(uri.getPath());
+            String[] paths = new String[]{file.getAbsolutePath()};
+            Log.e(TAG, "paths：" + Arrays.toString(paths));
+            MediaScannerConnection.scanFile(context, paths, null, null);
         }
-        if (file != null) {
-            Log.e(TAG, "file.getAbsolutePath()：" + file.getAbsolutePath());
-            Log.e(TAG, "file.getPath()：" + file.getPath());
-        }
-        MediaScannerConnection.scanFile(context, new String[]{uri.getPath()}, null, new MediaScannerConnection.MediaScannerConnectionClient() {
-            @Override
-            public void onMediaScannerConnected() {
-                Log.e(TAG, "onMediaScannerConnected");
-            }
-
-            @Override
-            public void onScanCompleted(String s, Uri uri) {
-                Log.e(TAG, "s：" + s);
-                Log.e(TAG, "uri：" + uri);
-            }
-        });
     }
 
     //=============================================权限=============================================

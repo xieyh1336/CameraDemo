@@ -90,18 +90,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //打开相机
     private void openCamera() {
+        uri = null;
         uri = CameraUtils.openCamera(this, "test", "albumDir");
     }
 
     //打开相册
     private void openAlbum() {
+        uri = null;
         CameraUtils.openAlbum(this);
     }
 
     private void openCrop() {
-        if (uri == null) {
-            return;
-        }
         uri = CameraUtils.openCrop(this, uri, "testCrop", "cropDir");
     }
 
