@@ -137,8 +137,11 @@ public class CameraUtils {
         }
         Log.e(TAG, "cropUri：" + resultUri);
         Intent intent = new Intent("com.android.camera.action.CROP");
-        //下面那句话如果添加的话，小米调用系统相册则无法裁剪，暂时备注掉，未测试其他机型
-//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        if (!DeviceUtils.isMIUI()) {
+            //小米相册ContentProvider生成的对所有应用开放，不需要临时权限
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
         intent.setDataAndType(uri, "image/*");
         // 设置裁剪
         intent.putExtra("crop", "true");
